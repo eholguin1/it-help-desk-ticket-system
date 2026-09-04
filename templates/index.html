@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Help Desk</title>
+</head>
+
+<body>
+
+    <h1>IT Help Desk</h1>
+
+    <h2>Submit a Ticket</h2>
+
+    <form>
+
+        <label>Name:</label>
+        <input type="text" name="name">
+
+        <br><br>
+
+        <label>Email:</label>
+        <input type="email" name="email">
+
+        <br><br>
+
+        <label>Issue:</label>
+        <input type="text" name="issue">
+
+        <br><br>
+
+        <label>Category:</label>
+        <select name="category">
+            <option value="hardware">Hardware</option>
+            <option value="software">Software</option>
+            <option value="network">Network</option>
+            <option value="account">Account/Login</option>
+            <option value="other">Other</option>
+        </select>
+
+        <br><br>
+
+        <label>Priority:</label>
+        <select name="priority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+            <option value="critical">Critical</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Submit Ticket</button>
+
+    </form>
+
+</body>
+</html>
