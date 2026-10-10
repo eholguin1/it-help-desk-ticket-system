@@ -2,12 +2,34 @@
 #Able for python to act as a web server/application
 #request --> lets Python access information that a user submits through a form
 from flask import Flask, render_template, request
+        #render_template allows Flask to load an HTML file
+import sqlite3 #built in python library that lets you work with SQLite databases    
+        #stores data in a file on your computer, so you do not have to use a separate datebase server
 
-#render_template allows Flask to load an HTML file
 
 #Creates the Flask application
 app = Flask(__name__) #storing variable named app
 #__name__ --> tells Flask which Python module is running the application
+
+#Creates the database and tickets table if they dont exist
+def init_db():
+    connection = sqlite3.connect("tickets.db")
+        #opens a connection an SQLIte database, if the file doesnt exist, it will be created
+        #(communicate with the database)
+    
+    connection.execute("""
+        CREATE TABLE IF NOT EXISTS tickets (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            issue TEXT NOT NULL,
+            category TEXT NOT NULL,
+            priority TEXT NOT NULL
+        )
+    """)
+    connection.commit() #saves the changes made to through the database connection
+    connection.close() #closes the connection to the database
+    
 
 #When someone visits the URL, run the function below
 @app.route("/", methods=["GET","POST"]) #"/" is the home page 
@@ -25,6 +47,18 @@ def home():
         category = request.form.get("category")
         priority = request.form.get("priority")
 
+        #connects to the database
+        connection = sqlite3.connect("tickets.db")
+        #inserts the ticket information into the table
+        connection.execute("""
+            INSERT INTO tickets(name, email, issue, category, priority) VALUES (?, ?, ?, ?, ?)
+        """, (name, email, issue, category, priority))
+            #? are placeholders for the values provided in the tuple (name, email, issue, category, priority)
+        #saves the ticket to the database
+        connection.commit()
+        #closes the database connection
+        connection.close()
+        #shows a comfirmation page
         return f"""
         <h1>Ticket Recieved!<h1>
         <p>Name: {name}</p>
@@ -39,4 +73,5 @@ def home():
     return render_template("index.html") #if the request method is not POST, show the form
 #Only run the following code if this file is being run directly
 if __name__ == "__main__":
+    init_db()
     app.run(debug=True) #Starts the application and turns on debug mode
