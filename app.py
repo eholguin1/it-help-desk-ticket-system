@@ -24,9 +24,17 @@ def init_db():
             email TEXT NOT NULL,
             issue TEXT NOT NULL,
             category TEXT NOT NULL,
-            priority TEXT NOT NULL
+            priority TEXT NOT NULL,
+            status TEXT NOT NULL DEFAULT 'Open'
         )
     """)
+
+    #add the status column to an existing table if it missing
+    columns = connection.execute("PRAGMA table_info(tickets)").fetchall()
+    column_names = [column[1] for column in columns]
+    if "status" not in column_names:
+        connection.execute("ALTER TABLE tickets ADD COLUMN status TEXT NOT NULL DEFAULT 'Open'")
+
     connection.commit() #saves the changes made to through the database connection
     connection.close() #closes the connection to the database
     
@@ -69,8 +77,21 @@ def home():
         <a href="/">Submit another ticket</a>
         """
             #creates the HTML response that the browser displays after submission
-        
     return render_template("index.html") #if the request method is not POST, show the form
+
+#Displays all saved tickets
+@app.route("/tickets")
+def tickets():
+    #connects to the database
+    connection = sqlite3.connect("tickets.db")
+    #retrieves all tickets from the database
+    tickets = connection.execute("SELECT * FROM tickets ORDER BY id DESC").fetchall()
+                                                #ORDER BY id DESC --> shows the newsest ticket first
+                                                #.fetchall() --> collects the results into a python list
+    #closes the database connection
+    connection.close()
+    #sneds the tickets to the HTML page
+    return render_template("tickets.html", tickets=tickets)
 #Only run the following code if this file is being run directly
 if __name__ == "__main__":
     init_db()

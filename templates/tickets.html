@@ -1,0 +1,46 @@
+<!-- uses Jinja, the template language built into Flask -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Dashboard</title>
+</head>
+
+<body>
+    <h1>IT Help Desk - Ticket Dashboard</h1>
+
+    <h2>All Tickets</h2>
+
+    {% if tickets %}
+        <table border="1" cellpadding="8">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Issue</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Status</th>
+            </tr>
+
+            {% for ticket in tickets %} 
+                <tr>
+                    <td>{{ ticket[0] }}</td> 
+                    <td>{{ ticket[1] }}</td> 
+                    <td>{{ ticket[2] }}</td> 
+                    <td>{{ ticket[3] }}</td> 
+                    <td>{{ ticket[4] }}</td>      
+                    <td>{{ ticket[5] }}</td>
+                    <td>{{ ticket[6] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No tickets have been submitted yet.</p>
+    {% endif %}
+
+    <br>
+    <a href="/">Submit a New Ticket</a>
+</body>
+</html>
