@@ -1,7 +1,7 @@
 #Imports the Flask class from the Flask library
 #Able for python to act as a web server/application
 #request --> lets Python access information that a user submits through a form
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request
         #render_template allows Flask to load an HTML file
 import sqlite3 #built in python library that lets you work with SQLite databases    
         #stores data in a file on your computer, so you do not have to use a separate datebase server
@@ -92,6 +92,26 @@ def tickets():
     connection.close()
     #sneds the tickets to the HTML page
     return render_template("tickets.html", tickets=tickets)
+
+#Updates the status of a ticket
+@app.route("/update_status/<int:ticket_id>", methods=["POST"])
+    # /update_status/ -->> is the beginning of the UR:L
+    # <int:ticket_id> --> the URL must contain a ticket ID represented as an integer
+    # methods=["POST"] --> this route accpets POST requests, whic are commonly used when submitting a form to change data
+    #ticket_id --> the ID of the ticket to update
+def update_status(ticket_id):
+    new_status = request.form.get("status") #selecting the status selected
+    if new_status not in ["Open", "In Progress", "Closed"]:
+        return "Invalid status",400 #400 is the HTTP status code meaning the request is invalid
+
+    connection = sqlite3.connect("tickets.db") #opens a connection to the SQLite database
+    connection.execute("UPDATE tickets SET status = ? WHERE id = ?", (new_status, ticket_id))
+
+    connection.commit() #saves the changes made to the database
+    connection.close() #closes the connection to the database
+
+    return redirect("/tickets") #redirects the user back to the tickets page after updating the status
+
 #Only run the following code if this file is being run directly
 if __name__ == "__main__":
     init_db()
