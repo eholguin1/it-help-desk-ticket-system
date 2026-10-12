@@ -112,6 +112,24 @@ def update_status(ticket_id):
 
     return redirect("/tickets") #redirects the user back to the tickets page after updating the status
 
+#Displays the details for one specific ticket
+@app.route("/ticket/<int:ticket_id>")
+def ticket_details(ticket_id):
+    #connect to the database
+    connection = sqlite3.connect("tickets.db")
+    #retrives the ticket matching the requested ID
+    ticket = connection.execute("SELECT * FROM tickets WHERE id = ?", (ticket_id,)).fetchone()
+
+    connection.close() #closes the connection to the database  
+
+    #check  wheater the ticket exists
+    if ticket is None:
+        return "Ticket not found", 404 #404 is the HTTP status code meaning the requested resource was not found
+
+    #sends the ticket infromation to the HTML page
+    return render_template("ticket_detail.html", ticket=ticket)
+        #opens the details page and passes the ticket infroamtion to it so it can be displayed                
+
 #Only run the following code if this file is being run directly
 if __name__ == "__main__":
     init_db()
