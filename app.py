@@ -80,18 +80,47 @@ def home():
     return render_template("index.html") #if the request method is not POST, show the form
 
 #Displays all saved tickets
+#Connects the "/tickets" URL to the tickets function, when someone visits /tickets, Flask runs this code
 @app.route("/tickets")
 def tickets():
-    #connects to the database
+    #connects to the SQlite database file where the tickets are stored
     connection = sqlite3.connect("tickets.db")
-    #retrieves all tickets from the database
-    tickets = connection.execute("SELECT * FROM tickets ORDER BY id DESC").fetchall()
-                                                #ORDER BY id DESC --> shows the newsest ticket first
-                                                #.fetchall() --> collects the results into a python list
-    #closes the database connection
-    connection.close()
-    #sneds the tickets to the HTML page
-    return render_template("tickets.html", tickets=tickets)
+
+    #Retrivies all tickets from the database
+    tickets = connection.execute(
+        "SELECT * FROM tickets ORDER BY id DESC"
+            #SELECT * --> get every column from the tickets table
+            #ORDER BY id DESC --> puts the newest ticket first
+    ).fetchall()
+        #fetchall() --> retrieves all matching rows and stores them in tickets
+    
+    #Counts how many tickers are currently "Open"
+    #COUNT(*) --> counts matching rows, and WHERE filters by status
+    open_count = connection.execute(
+        "SELECT COUNT(*) FROM tickets WHERE status = 'Open'"
+    ).fetchone()[0]
+        #fetchone() --> gets the result row, and [0] gets the count from that row
+
+    in_progress_count = connection.execute(
+        "SELECT COUNT(*) FROM tickets WHERE status = 'In Progress'"
+    ).fetchone()[0]
+
+    #Counts how many tickers are "Closed"
+    #The result is stored in the closed_count variable
+    closed_count = connection.execute(
+        "SELECT COUNT(*) FROM tickets WHERE status = 'Closed'"
+    ).fetchone()[0]
+
+    connection.close() #closes the connection
+
+    #Loads tickets.html and sends it the ticket list and all three counts. Theses values are used to display the dashboard.
+    return render_template(
+        "tickets.html",
+        tickets=tickets,
+        open_count=open_count,
+        in_progress_count=in_progress_count,
+        closed_count=closed_count
+    )
 
 #Updates the status of a ticket
 @app.route("/update_status/<int:ticket_id>", methods=["POST"])
