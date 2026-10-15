@@ -7,10 +7,89 @@
     <title>Ticket Dashboard</title>
 </head>
 
+
+    <style>
+        /* Sets the font and spacing for the dashboard */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+
+        /* Places the three summary cards next to each other */
+        .summary-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        /* Styles each individual summary card */
+        .summary-card {
+            flex: 1;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        /* Gives each card a different background color */
+        .open-card {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        .progress-card {
+            background-color: #DBEAFE;
+            color: #1D4ED8;
+        }
+
+        .closed-card {
+            background-color: #DCFCE7;
+            color: #166534;
+        }
+
+        /* Makes the ticket count stand out */
+        .summary-card h3 {
+            font-size: 16px;
+            margin: 0 0 10px;
+        }
+
+        .summary-card p {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0;
+        }
+    </style>
+
+
 <body>
     <h1>IT Help Desk - Ticket Dashboard</h1>
 
-    <h2>All Tickets</h2>
+    
+<h2>Ticket Summary</h2>
+
+<div class="summary-container">
+
+    <!-- Card showing the number of open tickets -->
+    <div class="summary-card open-card">
+        <h3>Open Tickets</h3>
+        <p>{{ open_count }}</p>
+    </div>
+
+    <!-- Card showing the number of tickets in progress -->
+    <div class="summary-card progress-card">
+        <h3>In Progress</h3>
+        <p>{{ in_progress_count }}</p>
+    </div>
+
+    <!-- Card showing the number of closed tickets -->
+    <div class="summary-card closed-card">
+        <h3>Closed Tickets</h3>
+        <p>{{ closed_count }}</p>
+    </div>
+
+</div>
+
+<h2>All Tickets</h2>
+
 
     {% if tickets %}
         <table border="1" cellpadding="8">
