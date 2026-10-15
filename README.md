@@ -39,8 +39,6 @@ it-help-desk-ticket-system/
 
 ### 1. Clone the repository
 
-Replace `YOUR-USERNAME` with your GitHub username.
-
 ```bash
 git clone https://github.com/eholguin1/it-help-desk-ticket-system.git
 cd it-help-desk-ticket-system
