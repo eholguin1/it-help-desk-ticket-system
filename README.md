@@ -2,6 +2,17 @@
 
 A web-based IT Help Desk Ticket System built with Python, Flask, SQLite, HTML, and CSS. This project simulates a basic IT support workflow by allowing users to submit support tickets and track their progress through a dashboard.
 
+## Screenshots
+
+### Ticket Dashboard
+![Ticket Dashboard](screenshots/dashboard.png)
+
+### Ticket Details
+![Ticket Details](screenshots/ticket-details.png)
+
+### Submit a Ticket
+![Submit a Ticket](screenshots/submit-ticket.png)
+
 ## Features
 
 - **Ticket Submission:** Submit support requests with a name, email, issue description, category, and priority.
@@ -25,11 +36,15 @@ A web-based IT Help Desk Ticket System built with Python, Flask, SQLite, HTML, a
 
 ```text
 it-help-desk-ticket-system/
-├── app.py
+├── screenshots/
+│   ├── dashboard.png
+│   ├── ticket-details.png
+│   └── submit-ticket.png
 ├── templates/
 │   ├── index.html
 │   ├── tickets.html
 │   └── ticket_detail.html
+├── app.py
 ├── requirements.txt
 ├── .gitignore
 └── README.md
